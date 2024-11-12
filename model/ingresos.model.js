@@ -9,7 +9,6 @@ const ingresoSchema = new mongoose.Schema({
     categoria: {
         type: String,
         required: true,
-        enum: ['Salario', 'Venta', 'Inversión', 'Otro'], 
     },
     descripcion: {
         type: String,

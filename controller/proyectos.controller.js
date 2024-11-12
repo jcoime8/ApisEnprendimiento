@@ -122,25 +122,34 @@ export const putProyectos = async (req, res) => {
 
 
 //mostrara todos los proyectos de la persona
-export const getIdAllproyectos = async(req, res)=>{
-    const id = req.params.id
+export const getIdAllproyectos = async (req, res) => {
+    const id = req.params.id;
     try {
-        const datos = await datosPer.findById(id)
-        if(!datos){
+        // Buscamos el documento por el ID
+        const datos = await datosPer.findById(id);
+        
+        if (!datos) {
             return res.status(404).json({
-                msg: 'No se ha encontrado el elemento'
-            })
+                msg: 'No se ha encontrado el elemento con el ID proporcionado'
+            });
         }
-        const proyecto = datos.proyectos
-        return res.status(200).json({
-            proyecto
-        })
+        if (!Array.isArray(datos.proyectos)) {
+            return res.status(404).json({
+                msg: 'No se ha encontrado proyectos para este usuario'
+            });
+        }
+        const proyectos = datos.proyectos;
+        return res.status(201).json({
+            proyectos
+        });
     } catch (error) {
+        console.error(error);  // Log para depuración
         return res.status(500).json({
-            error: 'Error al mostrar los elementos' + error 
-        })
+            error: 'Error al mostrar los elementos: ' + error.message
+        });
     }
 }
+
 
 export const postProyectos = async(req, res) => {
     const id = req.params.id
